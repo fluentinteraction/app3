@@ -75,3 +75,4 @@ export const words = [
     "What", "Wheel", "When", "Where", "Which", "While", "Whip", "Whisk", "White", "Who",
     "Whole", "Why", "Wide", "Wield"
     ];
+ 
