@@ -78,29 +78,4 @@ async function updateTaskStatus(code, task, status) {
     return responseData;
 }
 
-async function retrieveToolkit(code) {
-    const url = `https://api.airtable.com/v0/${airtableBaseId}/${airtableTableName}`;
-    const records = await fetch(`${url}?filterByFormula={ID}='${code}'`, {
-        headers: {
-            'Authorization': `Bearer ${airtableApiKey}`
-        }
-    }).then(res => res.json());
-
-    if (records.records.length === 0) {
-        throw new Error('Record not found');
-    }
- 
-    return records.records[0].fields;
-}
-
-function saveToSessionStorage(code, toolkit) {
-    sessionStorage.setItem('userCode', code);
-    sessionStorage.setItem(code, JSON.stringify(toolkit));
-}
-
-function loadFromSessionStorage(code) {
-    const data = sessionStorage.getItem(code);
-    return data ? JSON.parse(data) : null;
-}
-
-export { createToolkitRecord, updateTaskStatus, retrieveToolkit, saveToSessionStorage, loadFromSessionStorage };
+export { createToolkitRecord, updateTaskStatus };

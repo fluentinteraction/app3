@@ -1,5 +1,5 @@
 // main.js
-import { createToolkitRecord, retrieveToolkit } from './airtable.js';
+import { createToolkitRecord, retrieveToolkit, updateTaskStatus } from './airtable.js';
 import { words } from './words.js';
 
 window.dataLayer = window.dataLayer || [];
@@ -55,7 +55,7 @@ window.displayUserCode = function() {
 window.onload = function() {
     displayUserCode();
     setUserId();
-    updateTaskStatus();
+    updateTaskStatusDisplay();
 }
 
 window.createNewToolkit = async function() {
@@ -106,7 +106,8 @@ window.updateActionStatus = async function(task, status) {
     }
 
     try {
-        await updateTaskStatus(code, task, status);
+        const result = await updateTaskStatus(code, task, status);
+        console.log('Task status updated:', result);
         let toolkit = JSON.parse(sessionStorage.getItem(code)) || {};
         toolkit[task] = status;
         sessionStorage.setItem(code, JSON.stringify(toolkit));
@@ -121,7 +122,7 @@ window.updateActionStatus = async function(task, status) {
     }
 }
 
-function updateTaskStatus() {
+function updateTaskStatusDisplay() {
     const code = sessionStorage.getItem('userCode');
     if (code && code !== 'Undefined') {
         const toolkit = JSON.parse(sessionStorage.getItem(code)) || {};
