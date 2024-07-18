@@ -147,50 +147,43 @@
             });
         }
 
+        function updateAirtableRecord(code, size) {
+            const data = {
+                fields: {
+                    ID: code,
+                    Size: size,
+                    'Task 1': document.getElementById('task1-status').textContent,
+                    'Task 2': document.getElementById('task2-status').textContent,
+                    'Task 3': document.getElementById('task3-status').textContent
+                }
+            };
+
+            axios.patch(`https://api.airtable.com/v0/${baseId}/${tableId}/${recordId}`, data, {
+                headers: {
+                    Authorization: `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                console.log('Data updated in Airtable:', response.data);
+            }).catch(error => {
+                console.error('Error updating Airtable:', error);
+            });
+        }
+
         function updateDropdowns() {
             const tasks = ['task1', 'task2', 'task3'];
             tasks.forEach(task => {
                 const status = document.getElementById(`${task}-status`).textContent;
                 const dropdown = document.getElementById(`${task}-update`);
-                dropdown.innerHTML = `<option disabled selected>Select...</option>`;
+                dropdown.innerHTML = '<option disabled selected>Select...</option>';
                 if (status === 'Not complete') {
-                    dropdown.innerHTML += `<option value="Complete">Complete</option><option value="Skipped">Skipped</option>`;
+                    dropdown.innerHTML += '<option value="Complete">Complete</option><option value="Skipped">Skipped</option>';
                 } else if (status === 'Complete') {
-                    dropdown.innerHTML += `<option value="Not complete">Not complete</option><option value="Skipped">Skipped</option>`;
+                    dropdown.innerHTML += '<option value="Not complete">Not complete</option><option value="Skipped">Skipped</option>';
                 } else if (status === 'Skipped') {
-                    dropdown.innerHTML += `<option value="Not complete">Not complete</option><option value="Complete">Complete</option>`;
+                    dropdown.innerHTML += '<option value="Not complete">Not complete</option><option value="Complete">Complete</option>';
                 }
             });
-        }
-
-        function updateAirtableRecord(code, size) {
-            if (recordId) {
-                const data = {
-                    fields: {
-                        ID: code,
-                        Size: size,
-                        'Task 1': document.getElementById('task1-status').textContent,
-                        'Task 2': document.getElementById('task2-status').textContent,
-                        'Task 3': document.getElementById('task3-status').textContent
-                    }
-                };
-
-                console.log('Data being sent to Airtable:', data); // Log the data being sent
-
-                axios.patch(`https://api.airtable.com/v0/${baseId}/${tableId}/${recordId}`, data, {
-                    headers: {
-                        Authorization: `Bearer ${apiKey}`,
-                        'Content-Type': 'application/json'
-                    }
-                }).then(response => {
-                    console.log('Data updated in Airtable:', response.data);
-                }).catch(error => {
-                    console.error('Error updating Airtable:', error);
-                    console.log('Error details:', error.response ? error.response.data : error.message);
-                });
-            } else {
-                console.error('Record ID not found. Cannot update record.');
-            }
         }
 
         window.onload = loadCode;
