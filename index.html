@@ -12,77 +12,109 @@
         gtag('js', new Date());
 
         gtag('config', 'G-NYJFTSXW0K', {
-            'send_page_view': true,  // Enable page view tracking
-            'debug_mode': true  // Enable debug mode
+            'send_page_view': true,
+            'debug_mode': true
         });
 
         window.setUserId = function() {
             let code = sessionStorage.getItem('userCode');
-            console.log('Retrieved userCode from sessionStorage:', code); // Debug log
+            console.log('Retrieved userCode from sessionStorage:', code);
             if (code && code !== 'Undefined') {
                 gtag('set', {'user_id': code});
-                console.log('GA4 set user_id:', code); // Debug log
+                console.log('GA4 set user_id:', code);
             } else {
-                console.log('GA4 config without user_id'); // Debug log
+                console.log('GA4 config without user_id');
             }
         }
 
         window.resetToolkit = function() {
             sessionStorage.setItem('userCode', 'Undefined');
             sessionStorage.removeItem('businessSize');
-            console.log('Reset userCode to Undefined'); // Debug log
+            console.log('Reset userCode to Undefined');
 
-            // Clear user_id in GA4
             gtag('set', {'user_id': null});
-            console.log('GA4 reset with user_id null'); // Debug log
+            console.log('GA4 reset with user_id null');
 
-            window.location.href = 'index.html';
+            window.location.reload();
         }
 
         window.displayUserCode = function() {
             const code = sessionStorage.getItem('userCode');
             const codeDisplay = document.getElementById('user-code-display');
-            console.log('Display userCode:', code); // Debug log
+            const codeSection = document.getElementById('code-section');
+            const retrieveSection = document.getElementById('retrieve-section');
+            console.log('Display userCode:', code);
 
             if (code && code !== 'Undefined') {
                 codeDisplay.textContent = `Your code: ${code}`;
-                document.getElementById('reset-link').style.display = 'inline';
+                codeSection.style.display = 'block';
+                retrieveSection.style.display = 'none';
             } else {
-                codeDisplay.textContent = `Your code: Undefined`;
-                document.getElementById('reset-link').style.display = 'none';
+                codeSection.style.display = 'none';
+                retrieveSection.style.display = 'block';
             }
         }
 
         window.onload = function() {
             displayUserCode();
             setUserId();
-        }
-    </script>
-    <script type="module">
-        import { createToolkitRecord, retrieveToolkit, saveToSessionStorage } from './airtable.js';
-        import { words } from './words.js';
-
-        function generateCode() {
-            return words[Math.floor(Math.random() * words.length)] + words[Math.floor(Math.random() * words.length)] + words[Math.floor(Math.random() * words.length)];
+            updateTaskStatus();
         }
 
-        async function getNewToolkit() {
-            const code = generateCode();
-            const businessSize = document.getElementById('business-size').value;
-            if (businessSize === 'Please select') {
-                alert('Please select your business size.');
+        async function updateActionStatus(task, status) {
+            const code = sessionStorage.getItem('userCode');
+            if (!code) {
+                alert('No toolkit code found. Please get a new toolkit or retrieve an existing one.');
                 return;
             }
+
             try {
-                const result = await createToolkitRecord(code, businessSize);
-                console.log('Toolkit record creation result:', result);
-                sessionStorage.setItem('userCode', code);
-                sessionStorage.setItem('businessSize', businessSize);
-                gtag('set', {'user_id': code});  // Set User-ID in GA4
-                console.log('Set user_id in GA4:', code); // Debug log
-                window.location.href = 'tasklist.html';
+                await updateTaskStatus(code, task, status);
+                let toolkit = JSON.parse(sessionStorage.getItem(code)) || {};
+                toolkit[task] = status;
+                sessionStorage.setItem(code, JSON.stringify(toolkit));
+                gtag('event', 'task_status_update', {
+                    'task': task,
+                    'status': status,
+                    'user_id': code
+                });
+                document.getElementById(`status-${task}`).textContent = status.toUpperCase();
             } catch (error) {
-                console.error('Error creating toolkit record:', error);
+                console.error('Error updating task status:', error);
+            }
+        }
+
+        async function updateTaskStatus(code, task, status) {
+            // Function to update task status in the database
+            console.log(`Updating task status for ${task} to ${status} for code ${code}`);
+            // Implement your logic here
+        }
+
+        function updateTaskStatus() {
+            const code = sessionStorage.getItem('userCode');
+            if (code && code !== 'Undefined') {
+                const toolkit = JSON.parse(sessionStorage.getItem(code)) || {};
+                setStatus('Task 1', toolkit['Task 1']);
+                setStatus('Task 2', toolkit['Task 2']);
+                setStatus('Task 3', toolkit['Task 3']);
+                setStatus('Task 4', toolkit['Task 4']);
+                setStatus('Task 5', toolkit['Task 5']);
+                setStatus('Task 6', toolkit['Task 6']);
+            }
+        }
+
+        function setStatus(task, status) {
+            const statusElement = document.getElementById(`status-${task}`);
+            status = status || 'NOT COMPLETE';
+            statusElement.textContent = status.toUpperCase();
+
+            statusElement.classList.remove('not-complete', 'complete', 'skipped');
+            if (status.toUpperCase() === 'COMPLETE') {
+                statusElement.classList.add('complete');
+            } else if (status.toUpperCase() === 'SKIPPED') {
+                statusElement.classList.add('skipped');
+            } else {
+                statusElement.classList.add('not-complete');
             }
         }
 
@@ -97,46 +129,129 @@
                 const toolkit = await retrieveToolkit(code);
                 saveToSessionStorage(code, toolkit);
                 sessionStorage.setItem('businessSize', toolkit['Business size']);
-                gtag('set', {'user_id': code});  // Set User-ID in GA4
-                console.log('Retrieve and set user_id in GA4:', code); // Debug log
-                window.location.href = 'tasklist.html';
+                gtag('set', {'user_id': code});
+                console.log('Retrieve and set user_id in GA4:', code);
+                window.location.reload();
             } catch (error) {
                 console.error('Error retrieving toolkit:', error);
                 alert('Toolkit not found.');
             }
         }
 
-        window.getNewToolkit = getNewToolkit;
-        window.retrieveExistingToolkit = retrieveExistingToolkit;
+        async function retrieveToolkit(code) {
+            // Function to retrieve toolkit from the database
+            console.log(`Retrieving toolkit for code ${code}`);
+            // Implement your logic here
+            return {
+                "Task 1": "Not complete",
+                "Task 2": "Not complete",
+                "Task 3": "Not complete",
+                "Task 4": "Not complete",
+                "Task 5": "Not complete",
+                "Task 6": "Not complete",
+                "Business size": "Just me"
+            };
+        }
+
+        function saveToSessionStorage(code, toolkit) {
+            sessionStorage.setItem('userCode', code);
+            sessionStorage.setItem(code, JSON.stringify(toolkit));
+        }
     </script>
 </head>
 <body>
     <h1>My Cyber Toolkit</h1>
-    <div class="user-code-container">
+    <div id="code-section" style="display:none;">
         <div id="user-code-display" class="user-code-display"></div>
-        <a id="reset-link" href="javascript:resetToolkit()" style="display:none;">Reset</a>
+        <button onclick="navigator.clipboard.writeText(sessionStorage.getItem('userCode'));">Copy</button>
+        <button onclick="resetToolkit()">Reset</button>
     </div>
-    <div class="card-container">
-        <div class="card">
-            <h2>Get my toolkit</h2>
-            
-            <label for="business-size" class="business-size-label">How many people are in your business?</label>
-            <select id="business-size">
-                <option>Please select</option>
-                <option>Just me</option>
-                <option>2-10 people</option>
-                <option>11-25 people</option>
-                <option>26-50 people</option>
-                <option>more than 50 people</option>
-            </select>
-            <button onclick="getNewToolkit()">Get now</button>
-        </div>
-        <div class="card">
-            <h2>Retrieve my toolkit</h2>
-            <input type="text" id="user-code" placeholder="Enter your unique code" />
-            <button onclick="retrieveExistingToolkit()">Submit</button>
-        </div>
+    <div id="retrieve-section" style="display:none;">
+        <h2>Retrieve my toolkit</h2>
+        <input type="text" id="user-code" placeholder="Enter your unique code" />
+        <button onclick="retrieveExistingToolkit()">Submit</button>
     </div>
-
+    <div class="task-list">
+        <ul>
+            <li>
+                <div>Task 1: Secure your business's email accounts</div>
+                <div>Status: <span id="status-Task 1" class="status not-complete">NOT COMPLETE</span></div>
+                <div>
+                    <select id="select-Task 1">
+                        <option>Select option</option>
+                        <option value="Not complete">Not complete</option>
+                        <option value="Complete">Complete</option>
+                        <option value="Skipped">Skipped</option>
+                    </select>
+                    <button onclick="updateActionStatus('Task 1', document.getElementById('select-Task 1').value)">Update</button>
+                </div>
+            </li>
+            <li>
+                <div>Task 2: Secure your business's important online accounts</div>
+                <div>Status: <span id="status-Task 2" class="status not-complete">NOT COMPLETE</span></div>
+                <div>
+                    <select id="select-Task 2">
+                        <option>Select option</option>
+                        <option value="Not complete">Not complete</option>
+                        <option value="Complete">Complete</option>
+                        <option value="Skipped">Skipped</option>
+                    </select>
+                    <button onclick="updateActionStatus('Task 2', document.getElementById('select-Task 2').value)">Update</button>
+                </div>
+            </li>
+            <li>
+                <div>Task 3: Update your devices</div>
+                <div>Status: <span id="status-Task 3" class="status not-complete">NOT COMPLETE</span></div>
+                <div>
+                    <select id="select-Task 3">
+                        <option>Select option</option>
+                        <option value="Not complete">Not complete</option>
+                        <option value="Complete">Complete</option>
+                        <option value="Skipped">Skipped</option>
+                    </select>
+                    <button onclick="updateActionStatus('Task 3', document.getElementById('select-Task 3').value)">Update</button>
+                </div>
+            </li>
+            <li>
+                <div>Task 4: Check your browsers are up to date</div>
+                <div>Status: <span id="status-Task 4" class="status not-complete">NOT COMPLETE</span></div>
+                <div>
+                    <select id="select-Task 4">
+                        <option>Select option</option>
+                        <option value="Not complete">Not complete</option>
+                        <option value="Complete">Complete</option>
+                        <option value="Skipped">Skipped</option>
+                    </select>
+                    <button onclick="updateActionStatus('Task 4', document.getElementById('select-Task 4').value)">Update</button>
+                </div>
+            </li>
+            <li>
+                <div>Task 5: Backup all your important work files and data</div>
+                <div>Status: <span id="status-Task 5" class="status not-complete">NOT COMPLETE</span></div>
+                <div>
+                    <select id="select-Task 5">
+                        <option>Select option</option>
+                        <option value="Not complete">Not complete</option>
+                        <option value="Complete">Complete</option>
+                        <option value="Skipped">Skipped</option>
+                    </select>
+                    <button onclick="updateActionStatus('Task 5', document.getElementById('select-Task 5').value)">Update</button>
+                </div>
+            </li>
+            <li>
+                <div>Task 6: Train staff on how to spot phishing and fraud</div>
+                <div>Status: <span id="status-Task 6" class="status not-complete">NOT COMPLETE</span></div>
+                <div>
+                    <select id="select-Task 6">
+                        <option>Select option</option>
+                        <option value="Not complete">Not complete</option>
+                        <option value="Complete">Complete</option>
+                        <option value="Skipped">Skipped</option>
+                    </select>
+                    <button onclick="updateActionStatus('Task 6', document.getElementById('select-Task 6').value)">Update</button>
+                </div>
+            </li>
+        </ul>
+    </div>
 </body>
 </html>
