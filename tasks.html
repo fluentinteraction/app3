@@ -139,8 +139,7 @@
             // Track the status update event in GA4
             gtag('event', 'update_status', {
                 'task_id': taskId,
-                'status': status,
-                'user_id': code
+                'status': status
             });
             console.log('GA4 event sent: update_status', {
                 'task_id': taskId,

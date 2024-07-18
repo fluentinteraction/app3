@@ -69,6 +69,7 @@
                 const code = `${words[Math.floor(Math.random() * words.length)]}${words[Math.floor(Math.random() * words.length)]}${words[Math.floor(Math.random() * words.length)]}`;
                 sessionStorage.setItem('businessSize', size);
                 sessionStorage.setItem('code', code);
+                setUserId(code); // Set user_id immediately
                 createAirtableEntry(code, size);
             } else {
                 alert('Please select a business size.');
@@ -106,7 +107,6 @@
                 }
             }).then(response => {
                 console.log('Data saved to Airtable:', response.data);
-                setUserId(code);
                 window.location.href = 'tasks.html'; // Redirect after successfully creating the entry
             }).catch(error => {
                 console.error('Error saving to Airtable:', error);
