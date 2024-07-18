@@ -11,13 +11,13 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        let code = sessionStorage.getItem('userCode');
-        console.log('Initial userCode:', code); // Debug log
-
         gtag('config', 'G-NYJFTSXW0K', {
             'send_page_view': true,  // Enable page view tracking
             'debug_mode': true  // Enable debug mode
         });
+
+        let code = sessionStorage.getItem('userCode');
+        console.log('Initial userCode:', code); // Debug log
 
         if (code && code !== 'Undefined') {
             gtag('set', {'user_id': code});

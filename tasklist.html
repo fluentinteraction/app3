@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Cyber Toolkit</title>
+    <title>My Cyber Toolkit - Task List</title>
     <link rel="stylesheet" href="styles.css">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYJFTSXW0K"></script>
     <script>
@@ -11,13 +11,13 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        let code = sessionStorage.getItem('userCode');
-        console.log('Initial userCode:', code); // Debug log
-
         gtag('config', 'G-NYJFTSXW0K', {
             'send_page_view': true,  // Enable page view tracking
             'debug_mode': true  // Enable debug mode
         });
+
+        let code = sessionStorage.getItem('userCode');
+        console.log('Initial userCode:', code); // Debug log
 
         if (code && code !== 'Undefined') {
             gtag('set', {'user_id': code});
@@ -38,10 +38,19 @@
             window.location.href = 'index.html';
         }
 
-        window.displayUserCode = function() {
+        window.displayUserCodeAndBusinessSize = function() {
             const code = sessionStorage.getItem('userCode');
+            const businessSize = sessionStorage.getItem('businessSize');
             const codeDisplay = document.getElementById('user-code-display');
+            const businessSizeDisplay = document.getElementById('business-size-display');
             console.log('Display userCode:', code); // Debug log
+            console.log('Display businessSize:', businessSize); // Debug log
+
+            if (businessSize) {
+                businessSizeDisplay.textContent = `Business size: ${businessSize}`;
+            } else {
+                businessSizeDisplay.textContent = '';
+            }
 
             if (code && code !== 'Undefined') {
                 codeDisplay.textContent = `Your code: ${code}`;
@@ -52,87 +61,55 @@
             }
         }
 
-        window.onload = displayUserCode;
-    </script>
-    <script type="module">
-        import { createToolkitRecord, retrieveToolkit, saveToSessionStorage } from './airtable.js';
-        import { words } from './words.js';
-
-        function generateCode() {
-            return words[Math.floor(Math.random() * words.length)] + words[Math.floor(Math.random() * words.length)] + words[Math.floor(Math.random() * words.length)];
+        window.onload = function() {
+            displayUserCodeAndBusinessSize();
+            updateTaskStatus();
         }
 
-        async function getNewToolkit() {
-            const code = generateCode();
-            const businessSize = document.getElementById('business-size').value;
-            if (businessSize === 'Please select') {
-                alert('Please select your business size.');
-                return;
-            }
-            try {
-                const result = await createToolkitRecord(code, businessSize);
-                console.log('Toolkit record creation result:', result);
-                sessionStorage.setItem('userCode', code);
-                sessionStorage.setItem('businessSize', businessSize);
-                gtag('set', {'user_id': code});  // Set User-ID in GA4
-                console.log('Set user_id in GA4:', code); // Debug log
-                window.location.href = 'tasklist.html';
-            } catch (error) {
-                console.error('Error creating toolkit record:', error);
+        function updateTaskStatus() {
+            const code = sessionStorage.getItem('userCode');
+            if (code && code !== 'Undefined') {
+                const toolkit = JSON.parse(sessionStorage.getItem(code)) || {};
+                setStatus('status1', toolkit['Task 1']);
+                setStatus('status2', toolkit['Task 2']);
+                setStatus('status3', toolkit['Task 3']);
+                setStatus('status4', toolkit['Task 4']);
+                setStatus('status5', toolkit['Task 5']);
+                setStatus('status6', toolkit['Task 6']);
             }
         }
 
-        async function retrieveExistingToolkit() {
-            const code = document.getElementById('user-code').value.trim();
-            if (!code) {
-                alert('Please enter your unique code.');
-                return;
-            }
+        function setStatus(elementId, status) {
+            const statusElement = document.getElementById(elementId);
+            status = status || 'NOT COMPLETE';
+            statusElement.textContent = status.toUpperCase();
 
-            try {
-                const toolkit = await retrieveToolkit(code);
-                saveToSessionStorage(code, toolkit);
-                sessionStorage.setItem('businessSize', toolkit['Business size']);
-                gtag('set', {'user_id': code});  // Set User-ID in GA4
-                console.log('Retrieve and set user_id in GA4:', code); // Debug log
-                window.location.href = 'tasklist.html';
-            } catch (error) {
-                console.error('Error retrieving toolkit:', error);
-                alert('Toolkit not found.');
+            statusElement.classList.remove('not-complete', 'complete', 'skipped');
+            if (status.toUpperCase() === 'COMPLETE') {
+                statusElement.classList.add('complete');
+            } else if (status.toUpperCase() === 'SKIPPED') {
+                statusElement.classList.add('skipped');
+            } else {
+                statusElement.classList.add('not-complete');
             }
         }
-
-        window.getNewToolkit = getNewToolkit;
-        window.retrieveExistingToolkit = retrieveExistingToolkit;
     </script>
 </head>
 <body>
-    <h1>My Cyber Toolkit</h1>
-    <div class="user-code-container">
-        <div id="user-code-display" class="user-code-display"></div>
+    <a href="index.html" class="back-link">Back to home</a>
+    <h1>My Cyber Toolkit - Task List</h1>
+    <div class="task-list">
+        <div id="business-size-display"></div>
+        <div id="user-code-display"></div>
         <a id="reset-link" href="javascript:resetToolkit()" style="display:none;">Reset</a>
+        <ul>
+            <li><a href="task1.html">Secure your business's email accounts</a> <span id="status1" class="status not-complete">NOT COMPLETE</span></li>
+            <li><a href="task2.html">Secure your business's important online accounts</a> <span id="status2" class="status not-complete">NOT COMPLETE</span></li>
+            <li><a href="task3.html">Update your devices</a> <span id="status3" class="status not-complete">NOT COMPLETE</span></li>
+            <li><a href="task4.html">Check your browsers are up to date</a> <span id="status4" class="status not-complete">NOT COMPLETE</span></li>
+            <li><a href="task5.html">Backup all your important work files and data</a> <span id="status5" class="status not-complete">NOT COMPLETE</span></li>
+            <li><a href="task6.html">Train staff on how to spot phishing and fraud</a> <span id="status6" class="status not-complete">NOT COMPLETE</span></li>
+        </ul>
     </div>
-    <div class="card-container">
-        <div class="card">
-            <h2>Get my toolkit</h2>
-            
-            <label for="business-size" class="business-size-label">How many people are in your business?</label>
-            <select id="business-size">
-                <option>Please select</option>
-                <option>Just me</option>
-                <option>2-10 people</option>
-                <option>11-25 people</option>
-                <option>26-50 people</option>
-                <option>more than 50 people</option>
-            </select>
-            <button onclick="getNewToolkit()">Get now</button>
-        </div>
-        <div class="card">
-            <h2>Retrieve my toolkit</h2>
-            <input type="text" id="user-code" placeholder="Enter your unique code" />
-            <button onclick="retrieveExistingToolkit()">Submit</button>
-        </div>
-    </div>
-
 </body>
 </html>
