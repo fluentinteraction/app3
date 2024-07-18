@@ -16,15 +16,19 @@
             'debug_mode': true  // Enable debug mode
         });
 
+        window.setUserId = function() {
+            let code = sessionStorage.getItem('userCode');
+            console.log('Retrieved userCode from sessionStorage:', code); // Debug log
+            if (code && code !== 'Undefined') {
+                gtag('set', {'user_id': code});
+                console.log('GA4 set user_id:', code); // Debug log
+            } else {
+                console.log('GA4 config without user_id'); // Debug log
+            }
+        }
+
         let code = sessionStorage.getItem('userCode');
         console.log('Initial userCode:', code); // Debug log
-
-        if (code && code !== 'Undefined') {
-            gtag('set', {'user_id': code});
-            console.log('GA4 set user_id:', code); // Debug log
-        } else {
-            console.log('GA4 config without user_id'); // Debug log
-        }
 
         window.resetToolkit = function() {
             sessionStorage.setItem('userCode', 'Undefined');
@@ -63,6 +67,7 @@
 
         window.onload = function() {
             displayUserCodeAndBusinessSize();
+            setUserId();
             updateTaskStatus();
         }
 
