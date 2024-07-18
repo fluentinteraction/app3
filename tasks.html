@@ -15,10 +15,7 @@
         });
 
         function setUserId(userId) {
-            gtag('config', 'G-NYJFTSXW0K', {
-                'user_id': userId,
-                'debug_mode': true
-            });
+            gtag('set', {'user_id': userId});
             console.log('GA4 user_id set to:', userId); // Log the user_id
         }
     </script>
