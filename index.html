@@ -5,19 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Cyber Toolkit</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-K45J2CVG');</script>
-    <!-- End Google Tag Manager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYJFTSXW0K"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        let code = sessionStorage.getItem('userCode');
+        console.log('Initial userCode:', code); // Debug log
+
+        if (code && code !== 'Undefined') {
+            gtag('config', 'G-NYJFTSXW0K', {
+                'user_id': code,
+                'send_page_view': true  // Enable page view tracking
+            });
+            console.log('GA4 config with user_id:', code); // Debug log
+        } else {
+            gtag('config', 'G-NYJFTSXW0K', {
+                'send_page_view': true  // Enable page view tracking
+            });
+            console.log('GA4 config without user_id'); // Debug log
+        }
+
+        window.resetToolkit = function() {
+            sessionStorage.setItem('userCode', 'Undefined');
+            sessionStorage.removeItem('businessSize');
+            console.log('Reset userCode to Undefined'); // Debug log
+
+            // Clear user_id in GA4
+            gtag('config', 'G-NYJFTSXW0K', {
+                'user_id': null,
+                'send_page_view': true
+            });
+            console.log('GA4 reset with user_id null'); // Debug log
+
+            window.location.href = 'index.html';
+        }
+
+        window.displayUserCode = function() {
+            const code = sessionStorage.getItem('userCode');
+            const codeDisplay = document.getElementById('user-code-display');
+            console.log('Display userCode:', code); // Debug log
+
+            if (code && code !== 'Undefined') {
+                codeDisplay.textContent = `Your code: ${code}`;
+                document.getElementById('reset-link').style.display = 'inline';
+            } else {
+                codeDisplay.textContent = `Your code: Undefined`;
+                document.getElementById('reset-link').style.display = 'none';
+            }
+        }
+
+        window.onload = displayUserCode;
+    </script>
+    <script type="module">
+        import { createToolkitRecord, retrieveToolkit, saveToSessionStorage } from './airtable.js';
+        import { words } from './words.js';
+
+        function generateCode() {
+            return words[Math.floor(Math.random() * words.length)] + words[Math.floor(Math.random() * words.length)] + words[Math.floor(Math.random() * words.length)];
+        }
+
+        async function getNewToolkit() {
+            const code = generateCode();
+            const businessSize = document.getElementById('business-size').value;
+            if (businessSize === 'Please select') {
+                alert('Please select your business size.');
+                return;
+            }
+            try {
+                const result = await createToolkitRecord(code, businessSize);
+                console.log('Toolkit record creation result:', result);
+                sessionStorage.setItem('userCode', code);
+                sessionStorage.setItem('businessSize', businessSize);
+                gtag('set', 'user_properties', { user_id: code });  // Set User-ID in GA4
+                console.log('Set user_id in GA4:', code); // Debug log
+                window.location.href = 'tasklist.html';
+            } catch (error) {
+                console.error('Error creating toolkit record:', error);
+            }
+        }
+
+        async function retrieveExistingToolkit() {
+            const code = document.getElementById('user-code').value.trim();
+            if (!code) {
+                alert('Please enter your unique code.');
+                return;
+            }
+
+            try {
+                const toolkit = await retrieveToolkit(code);
+                saveToSessionStorage(code, toolkit);
+                sessionStorage.setItem('businessSize', toolkit['Business size']);
+                gtag('set', 'user_properties', { user_id: code });  // Set User-ID in GA4
+                console.log('Retrieve and set user_id in GA4:', code); // Debug log
+                window.location.href = 'tasklist.html';
+            } catch (error) {
+                console.error('Error retrieving toolkit:', error);
+                alert('Toolkit not found.');
+            }
+        }
+
+        window.getNewToolkit = getNewToolkit;
+        window.retrieveExistingToolkit = retrieveExistingToolkit;
+    </script>
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K45J2CVG"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
     <h1>My Cyber Toolkit</h1>
     <div class="user-code-container">
         <div id="user-code-display" class="user-code-display"></div>
@@ -45,120 +138,6 @@
         </div>
     </div>
 
-    <script>
-        function gtag() { dataLayer.push(arguments); }
-        let code = sessionStorage.getItem('userCode');
-        console.log('Initial userCode:', code); // Debug log
-
-        // Push a debug event to dataLayer
-        gtag('event', 'debug', {
-            'event_category': 'user_interaction',
-            'event_label': 'Page Load',
-            'debug_message': 'Page loaded, initial userCode: ' + code
-        });
-
-        window.resetToolkit = function() {
-            sessionStorage.setItem('userCode', 'Undefined');
-            sessionStorage.removeItem('businessSize');
-            console.log('Reset userCode to Undefined'); // Debug log
-            gtag('event', 'debug', {
-                'event_category': 'user_interaction',
-                'event_label': 'Reset Toolkit',
-                'debug_message': 'User reset toolkit'
-            });
-            window.location.href = 'index.html';
-        }
-
-        window.displayUserCode = function() {
-            const code = sessionStorage.getItem('userCode');
-            const codeDisplay = document.getElementById('user-code-display');
-            console.log('Display userCode:', code); // Debug log
-            gtag('event', 'debug', {
-                'event_category': 'user_interaction',
-                'event_label': 'Display User Code',
-                'debug_message': 'Displayed user code: ' + code
-            });
-
-            if (code && code !== 'Undefined') {
-                codeDisplay.textContent = `Your code: ${code}`;
-                document.getElementById('reset-link').style.display = 'inline';
-            } else {
-                codeDisplay.textContent = `Your code: Undefined`;
-                document.getElementById('reset-link').style.display = 'none';
-            }
-        }
-
-        window.onload = displayUserCode;
-
-        import { createToolkitRecord, retrieveToolkit, saveToSessionStorage } from './airtable.js';
-        import { words } from './words.js';
-
-        function generateCode() {
-            return words[Math.floor(Math.random() * words.length)] + words[Math.floor(Math.random() * words.length)] + words[Math.floor(Math.random() * words.length)];
-        }
-
-        async function getNewToolkit() {
-            const code = generateCode();
-            const businessSize = document.getElementById('business-size').value;
-            if (businessSize === 'Please select') {
-                alert('Please select your business size.');
-                return;
-            }
-            try {
-                const result = await createToolkitRecord(code, businessSize);
-                console.log('Toolkit record creation result:', result);
-                sessionStorage.setItem('userCode', code);
-                sessionStorage.setItem('businessSize', businessSize);
-                gtag('set', 'user_properties', { user_id: code });  // Set User-ID in GA4
-                gtag('event', 'debug', {
-                    'event_category': 'user_interaction',
-                    'event_label': 'New Toolkit',
-                    'debug_message': 'New toolkit created, user_id: ' + code
-                });
-                console.log('Set user_id in GA4:', code); // Debug log
-                window.location.href = 'tasklist.html';
-            } catch (error) {
-                console.error('Error creating toolkit record:', error);
-                gtag('event', 'debug', {
-                    'event_category': 'user_interaction',
-                    'event_label': 'New Toolkit Error',
-                    'debug_message': 'Error creating toolkit record: ' + error.message
-                });
-            }
-        }
-
-        async function retrieveExistingToolkit() {
-            const code = document.getElementById('user-code').value.trim();
-            if (!code) {
-                alert('Please enter your unique code.');
-                return;
-            }
-
-            try {
-                const toolkit = await retrieveToolkit(code);
-                saveToSessionStorage(code, toolkit);
-                sessionStorage.setItem('businessSize', toolkit['Business size']);
-                gtag('set', 'user_properties', { user_id: code });  // Set User-ID in GA4
-                gtag('event', 'debug', {
-                    'event_category': 'user_interaction',
-                    'event_label': 'Retrieve Toolkit',
-                    'debug_message': 'Retrieved toolkit, user_id: ' + code
-                });
-                console.log('Retrieve and set user_id in GA4:', code); // Debug log
-                window.location.href = 'tasklist.html';
-            } catch (error) {
-                console.error('Error retrieving toolkit:', error);
-                alert('Toolkit not found.');
-                gtag('event', 'debug', {
-                    'event_category': 'user_interaction',
-                    'event_label': 'Retrieve Toolkit Error',
-                    'debug_message': 'Error retrieving toolkit: ' + error.message
-                });
-            }
-        }
-
-        window.getNewToolkit = getNewToolkit;
-        window.retrieveExistingToolkit = retrieveExistingToolkit;
-    </script>
 </body>
 </html>
+ 

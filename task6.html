@@ -5,42 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Train staff on how to spot phishing and fraud</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-K45J2CVG');</script>
-    <!-- End Google Tag Manager -->
-</head>
-<body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K45J2CVG"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <a href="tasklist.html" class="back-link">Back to Tasks</a>
-    <h1>Train staff on how to spot phishing and fraud</h1>
-    <div class="task-card">
-        <select id="status">
-            <option value="Not complete">Not complete</option>
-            <option value="Complete">Complete</option>
-            <option value="Skipped">Skipped</option>
-        </select>
-        <button onclick="submitStatus()">Submit</button>
-    </div>
-
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYJFTSXW0K"></script>
     <script>
-        function gtag() { dataLayer.push(arguments); }
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        
         let code = sessionStorage.getItem('userCode');
         if (!code) {
             window.location.href = 'index.html';
         } else {
-            gtag('config', {
+            gtag('js', new Date());
+            gtag('config', 'G-NYJFTSXW0K', {
                 'user_id': code,
                 'send_page_view': true  // Enable page view tracking
             });
         }
-
+    </script>
+    <script type="module">
         import { updateTaskStatus } from './airtable.js';
 
         function getTaskStatus(task, code) {
@@ -86,5 +67,18 @@
 
         window.onload = loadTask;
     </script>
+</head>
+<body>
+    <a href="tasklist.html" class="back-link">Back to Tasks</a>
+    <h1>Train staff on how to spot phishing and fraud</h1>
+    <div class="task-card">
+        <select id="status">
+            <option value="Not complete">Not complete</option>
+            <option value="Complete">Complete</option>
+            <option value="Skipped">Skipped</option>
+        </select>
+        <button onclick="submitStatus()">Submit</button>
+    </div>
 </body>
 </html>
+ 

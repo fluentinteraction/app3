@@ -5,44 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Cyber Toolkit - Task List</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-K45J2CVG');</script>
-    <!-- End Google Tag Manager -->
-</head>
-<body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K45J2CVG"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <a href="index.html" class="back-link">Back to home</a>
-    <h1>My Cyber Toolkit - Task List</h1>
-    <div class="task-list">
-        <div id="business-size-display"></div>
-        <div id="user-code-display"></div>
-        <a id="reset-link" href="javascript:resetToolkit()" style="display:none;">Reset</a>
-        <ul>
-            <li><a href="task1.html">Secure your business's email accounts</a> <span id="status1" class="status not-complete">NOT COMPLETE</span></li>
-            <li><a href="task2.html">Secure your business's important online accounts</a> <span id="status2" class="status not-complete">NOT COMPLETE</span></li>
-            <li><a href="task3.html">Update your devices</a> <span id="status3" class="status not-complete">NOT COMPLETE</span></li>
-            <li><a href="task4.html">Check your browsers are up to date</a> <span id="status4" class="status not-complete">NOT COMPLETE</span></li>
-            <li><a href="task5.html">Backup all your important work files and data</a> <span id="status5" class="status not-complete">NOT COMPLETE</span></li>
-            <li><a href="task6.html">Train staff on how to spot phishing and fraud</a> <span id="status6" class="status not-complete">NOT COMPLETE</span></li>
-        </ul>
-    </div>
-
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYJFTSXW0K"></script>
     <script>
-        function gtag() { dataLayer.push(arguments); }
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
         let code = sessionStorage.getItem('userCode');
         console.log('Initial userCode:', code); // Debug log
 
         if (!code || code === 'Undefined') {
             window.location.href = 'index.html';
         } else {
-            gtag('config', {
+            gtag('config', 'G-NYJFTSXW0K', {
                 'user_id': code,
                 'send_page_view': true  // Enable page view tracking
             });
@@ -53,6 +28,14 @@
             sessionStorage.setItem('userCode', 'Undefined');
             sessionStorage.removeItem('businessSize');
             console.log('Reset userCode to Undefined'); // Debug log
+
+            // Clear user_id in GA4
+            gtag('config', 'G-NYJFTSXW0K', {
+                'user_id': null,
+                'send_page_view': true
+            });
+            console.log('GA4 reset with user_id null'); // Debug log
+
             window.location.href = 'index.html';
         }
 
@@ -112,5 +95,23 @@
             }
         }
     </script>
+</head>
+<body>
+    <a href="index.html" class="back-link">Back to home</a>
+    <h1>My Cyber Toolkit - Task List</h1>
+    <div class="task-list">
+        <div id="business-size-display"></div>
+        <div id="user-code-display"></div>
+        <a id="reset-link" href="javascript:resetToolkit()" style="display:none;">Reset</a>
+        <ul>
+            <li><a href="task1.html">Secure your business's email accounts</a> <span id="status1" class="status not-complete">NOT COMPLETE</span></li>
+            <li><a href="task2.html">Secure your business's important online accounts</a> <span id="status2" class="status not-complete">NOT COMPLETE</span></li>
+            <li><a href="task3.html">Update your devices</a> <span id="status3" class="status not-complete">NOT COMPLETE</span></li>
+            <li><a href="task4.html">Check your browsers are up to date</a> <span id="status4" class="status not-complete">NOT COMPLETE</span></li>
+            <li><a href="task5.html">Backup all your important work files and data</a> <span id="status5" class="status not-complete">NOT COMPLETE</span></li>
+            <li><a href="task6.html">Train staff on how to spot phishing and fraud</a> <span id="status6" class="status not-complete">NOT COMPLETE</span></li>
+        </ul>
+    </div>
 </body>
 </html>
+ 
