@@ -14,18 +14,15 @@
         let code = sessionStorage.getItem('userCode');
         console.log('Initial userCode:', code); // Debug log
 
+        gtag('config', 'G-NYJFTSXW0K', {
+            'send_page_view': true,  // Enable page view tracking
+            'debug_mode': true  // Enable debug mode
+        });
+
         if (code && code !== 'Undefined') {
-            gtag('config', 'G-NYJFTSXW0K', {
-                'user_id': code,
-                'send_page_view': true,  // Enable page view tracking
-                'debug_mode': true  // Enable debug mode
-            });
-            console.log('GA4 config with user_id:', code); // Debug log
+            gtag('set', {'user_id': code});
+            console.log('GA4 set user_id:', code); // Debug log
         } else {
-            gtag('config', 'G-NYJFTSXW0K', {
-                'send_page_view': true,  // Enable page view tracking
-                'debug_mode': true  // Enable debug mode
-            });
             console.log('GA4 config without user_id'); // Debug log
         }
 
@@ -35,11 +32,7 @@
             console.log('Reset userCode to Undefined'); // Debug log
 
             // Clear user_id in GA4
-            gtag('config', 'G-NYJFTSXW0K', {
-                'user_id': null,
-                'send_page_view': true,
-                'debug_mode': true  // Enable debug mode
-            });
+            gtag('set', {'user_id': null});
             console.log('GA4 reset with user_id null'); // Debug log
 
             window.location.href = 'index.html';
@@ -81,7 +74,7 @@
                 console.log('Toolkit record creation result:', result);
                 sessionStorage.setItem('userCode', code);
                 sessionStorage.setItem('businessSize', businessSize);
-                gtag('set', 'user_properties', { user_id: code });  // Set User-ID in GA4
+                gtag('set', {'user_id': code});  // Set User-ID in GA4
                 console.log('Set user_id in GA4:', code); // Debug log
                 window.location.href = 'tasklist.html';
             } catch (error) {
@@ -100,7 +93,7 @@
                 const toolkit = await retrieveToolkit(code);
                 saveToSessionStorage(code, toolkit);
                 sessionStorage.setItem('businessSize', toolkit['Business size']);
-                gtag('set', 'user_properties', { user_id: code });  // Set User-ID in GA4
+                gtag('set', {'user_id': code});  // Set User-ID in GA4
                 console.log('Retrieve and set user_id in GA4:', code); // Debug log
                 window.location.href = 'tasklist.html';
             } catch (error) {
@@ -140,5 +133,6 @@
             <button onclick="retrieveExistingToolkit()">Submit</button>
         </div>
     </div>
+
 </body>
 </html>
