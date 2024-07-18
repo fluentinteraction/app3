@@ -45,9 +45,12 @@
                 'user_id': userId
             });
 
+            // Debugging information
+            console.log('Cookie set: user_id=' + userId);
             console.log('GA4 event sent: user_id_generated', {
                 'user_id': userId
             });
+            console.log('Data Layer:', window.dataLayer);
         }
     </script>
 </body>
