@@ -4,30 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GA4 test</title>
-    <!-- GA4 Tag -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYJFTSXW0K"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-NYJFTSXW0K', {
-            'debug_mode': true
-        });
-
-        function setUserId(userId) {
-            gtag('set', {'user_id': userId});
-            console.log('GA4 user_id set to:', userId); // Log the user_id
-        }
-    </script>
     <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-K45J2CVG');</script>
-<!-- End Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K45J2CVG');</script>
+    <!-- End Google Tag Manager -->
 </head>
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K45J2CVG"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <h1>GA4 test</h1>
     <div id="get-toolkit">
         <h2>Get new toolkit</h2>
@@ -52,10 +41,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <button type="button" onclick="retrieveToolkit()">Submit</button>
         </form>
     </div>
- <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K45J2CVG"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+
     <script src="words.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
@@ -79,7 +65,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 const code = `${words[Math.floor(Math.random() * words.length)]}${words[Math.floor(Math.random() * words.length)]}${words[Math.floor(Math.random() * words.length)]}`;
                 sessionStorage.setItem('businessSize', size);
                 sessionStorage.setItem('code', code);
-                setUserId(code); // Set user_id immediately
+                document.cookie = `user_id=${code}; path=/`; // Set the user_id cookie
                 createAirtableEntry(code, size);
             } else {
                 alert('Please select a business size.');
@@ -90,7 +76,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             const code = document.getElementById('code-input').value;
             if (code) {
                 sessionStorage.setItem('code', code);
-                setUserId(code);
+                document.cookie = `user_id=${code}; path=/`; // Set the user_id cookie
                 window.location.href = 'tasks.html';
             } else {
                 alert('Please enter a code.');
@@ -126,6 +112,5 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         window.onload = loadWords;
     </script>
-   
 </body>
 </html>
