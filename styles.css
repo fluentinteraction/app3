@@ -20,6 +20,10 @@ li {
     margin-bottom: 24px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 li div {
@@ -30,6 +34,7 @@ li select, li button {
     width: 80%;
     padding: 10px;
     font-size: 16px;
+    margin-bottom: 24px;
 }
 
 button {
@@ -90,4 +95,9 @@ button:hover {
 
 #actions-section li {
     margin-bottom: 20px;
+}
+
+.task-title {
+    font-size: 20pt;
+    font-weight: bold;
 }

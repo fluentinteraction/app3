@@ -188,8 +188,11 @@
         }
 
         function generateCode() {
-            // Function to generate a unique code
-            return 'code-' + Math.random().toString(36).substr(2, 9);
+            // Use the three-word code generator
+            const words = ["apple", "banana", "cherry", "date", "elderberry", "fig", "grape", "honeydew"];
+            return words[Math.floor(Math.random() * words.length)] + '-' + 
+                   words[Math.floor(Math.random() * words.length)] + '-' + 
+                   words[Math.floor(Math.random() * words.length)];
         }
     </script>
 </head>
@@ -201,29 +204,26 @@
         <button onclick="signOut()">Sign out</button>
     </div>
     <div id="retrieve-section" style="display:none;">
-        <button onclick="document.getElementById('create-section').style.display='block'; this.style.display='none';">Create new toolkit</button>
-        <div id="create-section" style="display:none;">
-            <h2>Create my toolkit</h2>
-            <label for="business-size">How many people are in your business?</label>
-            <select id="business-size">
-                <option>Please select</option>
-                <option>Just me</option>
-                <option>2-10 people</option>
-                <option>11-25 people</option>
-                <option>26-50 people</option>
-                <option>more than 50 people</option>
-            </select>
-            <button onclick="createNewToolkit()">Create</button>
-        </div>
+        <h2>Create my toolkit</h2>
+        <label for="business-size">How many people are in your business?</label>
+        <select id="business-size">
+            <option>Please select</option>
+            <option>Just me</option>
+            <option>2-10 people</option>
+            <option>11-25 people</option>
+            <option>26-50 people</option>
+            <option>more than 50 people</option>
+        </select>
+        <button onclick="createNewToolkit()">Create</button>
         <h2>Retrieve my toolkit</h2>
-        <input type="text" id="user-code" placeholder="Enter your unique code" />
+        <input type="text" id="user-code" placeholder="Enter your unique code" style="font-size: 16pt;" />
         <button onclick="retrieveExistingToolkit()">Submit</button>
     </div>
     <div id="actions-section" style="display:none;">
         <div class="task-list">
             <ul>
                 <li>
-                    <div>Task 1: Secure your business's email accounts</div>
+                    <div class="task-title">Task 1</div>
                     <div>Status: <span id="status-Task 1" class="status not-complete">NOT COMPLETE</span></div>
                     <div>
                         <select id="select-Task 1">
@@ -236,7 +236,7 @@
                     </div>
                 </li>
                 <li>
-                    <div>Task 2: Secure your business's important online accounts</div>
+                    <div class="task-title">Task 2</div>
                     <div>Status: <span id="status-Task 2" class="status not-complete">NOT COMPLETE</span></div>
                     <div>
                         <select id="select-Task 2">
@@ -249,7 +249,7 @@
                     </div>
                 </li>
                 <li>
-                    <div>Task 3: Update your devices</div>
+                    <div class="task-title">Task 3</div>
                     <div>Status: <span id="status-Task 3" class="status not-complete">NOT COMPLETE</span></div>
                     <div>
                         <select id="select-Task 3">
@@ -262,7 +262,7 @@
                     </div>
                 </li>
                 <li>
-                    <div>Task 4: Check your browsers are up to date</div>
+                    <div class="task-title">Task 4</div>
                     <div>Status: <span id="status-Task 4" class="status not-complete">NOT COMPLETE</span></div>
                     <div>
                         <select id="select-Task 4">
@@ -275,7 +275,7 @@
                     </div>
                 </li>
                 <li>
-                    <div>Task 5: Backup all your important work files and data</div>
+                    <div class="task-title">Task 5</div>
                     <div>Status: <span id="status-Task 5" class="status not-complete">NOT COMPLETE</span></div>
                     <div>
                         <select id="select-Task 5">
@@ -288,7 +288,7 @@
                     </div>
                 </li>
                 <li>
-                    <div>Task 6: Train staff on how to spot phishing and fraud</div>
+                    <div class="task-title">Task 6</div>
                     <div>Status: <span id="status-Task 6" class="status not-complete">NOT COMPLETE</span></div>
                     <div>
                         <select id="select-Task 6">
