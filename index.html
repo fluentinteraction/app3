@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GA4 test</title>
+    <!-- GA4 Tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYJFTSXW0K"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NYJFTSXW0K');
+    </script>
+</head>
+<body>
+    <h1>GA4 test</h1>
+    <div id="get-toolkit">
+        <h2>Get new toolkit</h2>
+        <form id="business-size-form">
+            <label for="business-size">Business size</label>
+            <select id="business-size">
+                <option value="" disabled selected>Select</option>
+                <option value="Just me">Just me</option>
+                <option value="2-10 people">2-10 people</option>
+                <option value="11-25 people">11-25 people</option>
+                <option value="More than 25 people">More than 25 people</option>
+            </select>
+            <button type="button" onclick="generateCode()">Submit</button>
+        </form>
+    </div>
+
+    <div id="retrieve-toolkit">
+        <h2>Retrieve toolkit</h2>
+        <form id="retrieve-form">
+            <label for="code-input">Enter code</label>
+            <input type="text" id="code-input" placeholder="Enter code">
+            <button type="button" onclick="retrieveToolkit()">Submit</button>
+        </form>
+    </div>
+
+    <script src="words.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const baseId = 'appz5FTUV9lRIrVnX';
+        const tableId = 'tbl6c1vtMHKAdvW0y';
+        const apiKey = 'patbmGeSlLVLQyp3r.9ff9b009853c2c0a1232bda0220d640cca61257877c22b25336850c6b62775a5';
+
+        let words = [];
+
+        function loadWords() {
+            if (typeof wordsArray !== 'undefined') {
+                words = wordsArray;
+            } else {
+                console.error('wordsArray is not defined. Ensure words.js is loaded correctly.');
+            }
+        }
+
+        function generateCode() {
+            const size = document.getElementById('business-size').value;
+            if (size && words.length > 0) {
+                const code = `${words[Math.floor(Math.random() * words.length)]}${words[Math.floor(Math.random() * words.length)]}${words[Math.floor(Math.random() * words.length)]}`;
+                sessionStorage.setItem('businessSize', size);
+                sessionStorage.setItem('code', code);
+                createAirtableEntry(code, size);
+            } else {
+                alert('Please select a business size.');
+            }
+        }
+
+        function retrieveToolkit() {
+            const code = document.getElementById('code-input').value;
+            if (code) {
+                sessionStorage.setItem('code', code);
+                gtag('config', 'G-NYJFTSXW0K', {
+                    'user_id': code
+                });
+                window.location.href = 'tasks.html';
+            } else {
+                alert('Please enter a code.');
+            }
+        }
+
+        function createAirtableEntry(code, size) {
+            const data = {
+                fields: {
+                    ID: code,
+                    Size: size,
+                    'Task 1': 'Not complete',
+                    'Task 2': 'Not complete',
+                    'Task 3': 'Not complete'
+                }
+            };
+
+            console.log('Data being sent to Airtable:', data); // Log the data being sent
+
+            axios.post(`https://api.airtable.com/v0/${baseId}/${tableId}`, data, {
+                headers: {
+                    Authorization: `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                console.log('Data saved to Airtable:', response.data);
+                gtag('config', 'G-NYJFTSXW0K', {
+                    'user_id': code
+                });
+                window.location.href = 'tasks.html'; // Redirect after successfully creating the entry
+            }).catch(error => {
+                console.error('Error saving to Airtable:', error);
+                console.log('Error details:', error.response ? error.response.data : error.message);
+            });
+        }
+
+        window.onload = loadWords;
+    </script>
+</body>
+</html>
