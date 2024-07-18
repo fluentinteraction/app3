@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GA4 Test Page</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NYJFTSXW0K"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-NYJFTSXW0K');
+    </script>
+</head>
+<body>
+    <h1>GA4 Test Page</h1>
+    <p>This page is used to test the GA4 setup and display identifiers.</p>
+    
+    <h2>Identifiers:</h2>
+    <ul>
+        <li>User ID: <span id="userId">Not available</span></li>
+        <li>Google Signals (Google Account ID): <span id="googleSignals">Not available</span></li>
+        <li>Device ID: <span id="deviceId">Not available</span></li>
+        <li>Client ID: <span id="clientId">Not available</span></li>
+    </ul>
+
+    <script>
+        // Function to get Client ID from GA4 cookie
+        function getClientId() {
+            const clientId = document.cookie.match(/_ga=([^;]*)/);
+            return clientId ? clientId[1] : "Not available";
+        }
+
+        // Placeholder for User ID retrieval - requires server-side logic
+        function getUserId() {
+            // This needs to be implemented based on your user authentication logic
+            return "Not found"; // Example static value
+        }
+
+        // Placeholder for Google Signals retrieval - requires user consent
+        function getGoogleSignals() {
+            // Google Signals identification logic would be implemented here
+            return "Not found"; // Example static value
+        }
+
+        // Device ID typically correlates with the Client ID in web applications
+        function getDeviceId() {
+            // As Device ID is not directly accessible, we use Client ID as a proxy
+            return getClientId();
+        }
+
+        document.getElementById("userId").textContent = getUserId();
+        document.getElementById("googleSignals").textContent = getGoogleSignals();
+        document.getElementById("deviceId").textContent = getDeviceId();
+        document.getElementById("clientId").textContent = getClientId();
+    </script>
+</body>
+</html>

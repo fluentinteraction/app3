@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure your business's important online accounts</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K45J2CVG');</script>
+    <!-- End Google Tag Manager -->
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K45J2CVG"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <a href="tasklist.html" class="back-link">Back to Tasks</a>
+    <h1>Secure your business's important online accounts</h1>
+    <div class="task-card">
+        <select id="status">
+            <option value="Not complete">Not complete</option>
+            <option value="Complete">Complete</option>
+            <option value="Skipped">Skipped</option>
+        </select>
+        <button onclick="submitStatus()">Submit</button>
+    </div>
+
+    <script>
+        function gtag() { dataLayer.push(arguments); }
+        let code = sessionStorage.getItem('userCode');
+        if (!code) {
+            window.location.href = 'index.html';
+        } else {
+            gtag('config', {
+                'user_id': code,
+                'send_page_view': true  // Enable page view tracking
+            });
+        }
+
+        import { updateTaskStatus } from './airtable.js';
+
+        function getTaskStatus(task, code) {
+            let userData = JSON.parse(sessionStorage.getItem(code));
+            if (userData && userData[task]) {
+                return userData[task];
+            }
+            return 'Not complete';
+        }
+
+        function loadTask() {
+            const task = 'Task 2';
+            let code = sessionStorage.getItem('userCode');
+            document.getElementById('status').value = getTaskStatus(task, code);
+        }
+
+        window.submitStatus = async function() {
+            const task = 'Task 2';
+            const status = document.getElementById('status').value;
+            const code = sessionStorage.getItem('userCode');
+
+            if (!code) {
+                alert('No toolkit code found. Please get a new toolkit or retrieve an existing one.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                await updateTaskStatus(code, task, status);
+                let toolkit = JSON.parse(sessionStorage.getItem(code)) || {};
+                toolkit[task] = status;
+                sessionStorage.setItem(code, JSON.stringify(toolkit));
+                gtag('event', 'task_status_update', {
+                    'task': task,
+                    'status': status,
+                    'user_id': code  // Ensure user_id is associated with the event
+                });
+                window.location.href = 'tasklist.html';
+            } catch (error) {
+                console.error('Error updating task status:', error);
+            }
+        }
+
+        window.onload = loadTask;
+    </script>
+</body>
+</html>
