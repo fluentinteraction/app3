@@ -13,6 +13,14 @@
         gtag('config', 'G-NYJFTSXW0K', {
             'debug_mode': true
         });
+
+        function setUserId(userId) {
+            gtag('config', 'G-NYJFTSXW0K', {
+                'user_id': userId,
+                'debug_mode': true
+            });
+            console.log('GA4 user_id set to:', userId); // Log the user_id
+        }
     </script>
 </head>
 <body>
@@ -25,7 +33,8 @@
                 <option value="" disabled selected>Select</option>
                 <option value="Just me">Just me</option>
                 <option value="2-10 people">2-10 people</option>
-                <option value="11-25 people">11-25 people</                <option value="More than 25 people">More than 25 people</option>
+                <option value="11-25 people">11-25 people</option>
+                <option value="More than 25 people">More than 25 people</option>
             </select>
             <button type="button" onclick="generateCode()">Submit</button>
         </form>
@@ -73,10 +82,7 @@
             const code = document.getElementById('code-input').value;
             if (code) {
                 sessionStorage.setItem('code', code);
-                gtag('config', 'G-NYJFTSXW0K', {
-                    'user_id': code
-                });
-                console.log('GA4 user_id set to:', code); // Log the user_id
+                setUserId(code);
                 window.location.href = 'tasks.html';
             } else {
                 alert('Please enter a code.');
@@ -103,10 +109,7 @@
                 }
             }).then(response => {
                 console.log('Data saved to Airtable:', response.data);
-                gtag('config', 'G-NYJFTSXW0K', {
-                    'user_id': code
-                });
-                console.log('GA4 user_id set to:', code); // Log the user_id
+                setUserId(code);
                 window.location.href = 'tasks.html'; // Redirect after successfully creating the entry
             }).catch(error => {
                 console.error('Error saving to Airtable:', error);

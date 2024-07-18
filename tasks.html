@@ -13,6 +13,14 @@
         gtag('config', 'G-NYJFTSXW0K', {
             'debug_mode': true
         });
+
+        function setUserId(userId) {
+            gtag('config', 'G-NYJFTSXW0K', {
+                'user_id': userId,
+                'debug_mode': true
+            });
+            console.log('GA4 user_id set to:', userId); // Log the user_id
+        }
     </script>
 </head>
 <body>
@@ -76,10 +84,7 @@
             const code = sessionStorage.getItem('code');
             if (code) {
                 document.getElementById('generated-code').textContent = code;
-                gtag('config', 'G-NYJFTSXW0K', {
-                    'user_id': code
-                });
-                console.log('GA4 user_id set to:', code); // Log the user_id
+                setUserId(code);
                 fetchRecordId(code);
             } else {
                 window.location.href = 'index.html';
