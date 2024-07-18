@@ -19,6 +19,13 @@
             console.log('GA4 user_id set to:', userId); // Log the user_id
         }
     </script>
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-K45J2CVG');</script>
+<!-- End Google Tag Manager -->
 </head>
 <body>
     <h1>GA4 test</h1>
@@ -45,7 +52,10 @@
             <button type="button" onclick="retrieveToolkit()">Submit</button>
         </form>
     </div>
-
+ <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K45J2CVG"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
     <script src="words.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
@@ -116,5 +126,6 @@
 
         window.onload = loadWords;
     </script>
+   
 </body>
 </html>
