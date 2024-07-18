@@ -25,8 +25,7 @@
                 <option value="" disabled selected>Select</option>
                 <option value="Just me">Just me</option>
                 <option value="2-10 people">2-10 people</option>
-                <option value="11-25 people">11-25 people</option>
-                <option value="More than 25 people">More than 25 people</option>
+                <option value="11-25 people">11-25 people</                <option value="More than 25 people">More than 25 people</option>
             </select>
             <button type="button" onclick="generateCode()">Submit</button>
         </form>
@@ -77,6 +76,7 @@
                 gtag('config', 'G-NYJFTSXW0K', {
                     'user_id': code
                 });
+                console.log('GA4 user_id set to:', code); // Log the user_id
                 window.location.href = 'tasks.html';
             } else {
                 alert('Please enter a code.');
@@ -106,6 +106,7 @@
                 gtag('config', 'G-NYJFTSXW0K', {
                     'user_id': code
                 });
+                console.log('GA4 user_id set to:', code); // Log the user_id
                 window.location.href = 'tasks.html'; // Redirect after successfully creating the entry
             }).catch(error => {
                 console.error('Error saving to Airtable:', error);
