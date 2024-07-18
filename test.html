@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GA4 User ID Test</title>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K45J2CVG');</script>
+    <!-- End Google Tag Manager -->
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K45J2CVG"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <h1>GA4 User ID Test</h1>
+    <button onclick="generateAndSendUserID()">Generate and Send User ID</button>
+    <p id="user-id-display"></p>
+
+    <script>
+        function generateRandomUserID(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            const charactersLength = characters.length;
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+
+        function generateAndSendUserID() {
+            const userId = generateRandomUserID(12);
+            document.cookie = `user_id=${userId}; path=/`;
+            document.getElementById('user-id-display').textContent = `Generated User ID: ${userId}`;
+
+            // Push user_id to data layer
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                'event': 'user_id_generated',
+                'user_id': userId
+            });
+
+            console.log('GA4 event sent: user_id_generated', {
+                'user_id': userId
+            });
+        }
+    </script>
+</body>
+</html>
