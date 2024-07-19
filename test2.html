@@ -5,39 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GA4 User ID Test - Page 2</title>
     <script>
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        }
-
-        function getUserID() {
-            const userId = getCookie('user_id');
+        function getUserIDFromDataLayer() {
+            const userId = window.dataLayer && window.dataLayer.find(item => item.user_id)?.user_id;
             if (userId) {
                 document.getElementById('user-id-display').textContent = `Stored User ID: ${userId}`;
 
                 // Push user_id to data layer
-                window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
-                    'user_id': userId,
-                    'event': 'user_id_ready' // Custom event to signal user_id is ready
+                    'event': 'user_id_ready',
+                    'user_id': userId
                 });
 
                 // Debugging information
-                console.log('Cookie retrieved: user_id=' + userId);
                 console.log('Data Layer:', window.dataLayer);
             } else {
                 document.getElementById('user-id-display').textContent = 'No User ID found.';
             }
         }
 
-        // Run getUserID function after the DOM has fully loaded
+        // Get user ID on DOM load
         document.addEventListener("DOMContentLoaded", function() {
-            getUserID();
+            getUserIDFromDataLayer();
         });
     </script>
-</head>
-<body>
     <!-- Google Tag Manager -->
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -48,7 +38,8 @@
         })(window,document,'script','dataLayer','GTM-K45J2CVG');
     </script>
     <!-- End Google Tag Manager -->
-
+</head>
+<body>
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K45J2CVG"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>

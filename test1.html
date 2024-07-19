@@ -17,11 +17,16 @@
 
         function setUserID() {
             const userId = generateRandomUserID(12);
-            document.cookie = `user_id=${userId}; path=/`;
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                'event': 'userdata',
+                'user_id': userId
+            });
+
             document.getElementById('user-id-display').textContent = `Generated User ID: ${userId}`;
 
             // Debugging information
-            console.log('Cookie set: user_id=' + userId);
+            console.log('Data Layer:', window.dataLayer);
         }
 
         // Set user ID immediately
