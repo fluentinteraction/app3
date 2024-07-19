@@ -18,8 +18,7 @@
         function setUserID() {
             const userId = generateRandomUserID(12);
             document.cookie = `user_id=${userId}; path=/`;
-            document.getElementById('user-id-display').textContent = `Generated User ID: ${userId}`;
-
+            
             // Push user_id to data layer
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
@@ -37,10 +36,17 @@
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-K45J2CVG');
+            
+            return userId;
         }
 
         // Set user ID and initialize GTM immediately
-        setUserID();
+        const userId = setUserID();
+        
+        // Wait for the DOM to be fully loaded before manipulating it
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById('user-id-display').textContent = `Generated User ID: ${userId}`;
+        });
     </script>
 </head>
 <body>
@@ -50,6 +56,6 @@
     <!-- End Google Tag Manager (noscript) -->
 
     <h1>GA4 User ID Test</h1>
-    <p id="user-id-display"></p>
+    <p id="user-id-display">Loading user ID...</p>
 </body>
 </html>
