@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GA4 User ID Test - Page 2</title>
     <script>
-        function getUserIDFromDataLayer() {
-            const userId = window.dataLayer && window.dataLayer.find(item => item.user_id)?.user_id;
+        function getUserIDFromSessionStorage() {
+            const userId = sessionStorage.getItem('user_id');
             if (userId) {
                 document.getElementById('user-id-display').textContent = `Stored User ID: ${userId}`;
 
                 // Push user_id to data layer
+                window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
                     'event': 'user_id_ready',
                     'user_id': userId
@@ -24,7 +25,7 @@
         }
 
         function sendUserIDToGA() {
-            const userId = window.dataLayer && window.dataLayer.find(item => item.user_id)?.user_id;
+            const userId = sessionStorage.getItem('user_id');
             if (userId) {
                 // Push custom event to data layer to send user_id to GA
                 window.dataLayer.push({
@@ -41,7 +42,7 @@
 
         // Run getUserID function after the DOM has fully loaded
         document.addEventListener("DOMContentLoaded", function() {
-            getUserIDFromDataLayer();
+            getUserIDFromSessionStorage();
         });
     </script>
     <!-- Google Tag Manager -->

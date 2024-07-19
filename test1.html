@@ -25,6 +25,9 @@
 
             document.getElementById('user-id-display').textContent = `Generated User ID: ${userId}`;
 
+            // Store user_id in sessionStorage for retrieval in test2.html
+            sessionStorage.setItem('user_id', userId);
+
             // Debugging information
             console.log('Data Layer:', window.dataLayer);
         }
