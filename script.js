@@ -9,6 +9,10 @@ window.generateCode = function() {
         sessionStorage.setItem('businessSize', size);
         sessionStorage.setItem('custom_user_id', code);
         document.cookie = `custom_user_id=${code}; path=/`; // Set the custom_user_id cookie
+        window.dataLayer.push({
+            'event': 'login',
+            'custom_user_id': code
+        });
         createAirtableEntry(code, size);
     } else {
         alert('Please select a business size.');
@@ -20,6 +24,10 @@ window.retrieveToolkit = function() {
     if (code) {
         sessionStorage.setItem('custom_user_id', code);
         document.cookie = `custom_user_id=${code}; path=/`; // Set the custom_user_id cookie
+        window.dataLayer.push({
+            'event': 'login',
+            'custom_user_id': code
+        });
         window.location.href = 'tasks.html';
     } else {
         alert('Please enter a code.');
@@ -55,6 +63,10 @@ window.loadCode = function() {
     if (code) {
         document.getElementById('generated-code').textContent = code;
         document.cookie = `custom_user_id=${code}; path=/`; // Set the custom_user_id cookie
+        window.dataLayer.push({
+            'event': 'login',
+            'custom_user_id': code
+        });
         fetchRecordId(code);
     } else {
         window.location.href = 'index.html';
