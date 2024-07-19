@@ -23,7 +23,23 @@
             }
         }
 
-        // Get user ID on DOM load
+        function sendUserIDToGA() {
+            const userId = window.dataLayer && window.dataLayer.find(item => item.user_id)?.user_id;
+            if (userId) {
+                // Push custom event to data layer to send user_id to GA
+                window.dataLayer.push({
+                    'event': 'send_user_id_to_ga',
+                    'user_id': userId
+                });
+
+                // Debugging information
+                console.log('User ID sent to GA:', userId);
+            } else {
+                console.log('No User ID found to send to GA.');
+            }
+        }
+
+        // Run getUserID function after the DOM has fully loaded
         document.addEventListener("DOMContentLoaded", function() {
             getUserIDFromDataLayer();
         });
@@ -47,5 +63,6 @@
 
     <h1>GA4 User ID Test - Page 2</h1>
     <p id="user-id-display">Loading user ID...</p>
+    <button onclick="sendUserIDToGA()">Send User ID to GA</button>
 </body>
 </html>
