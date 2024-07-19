@@ -13,8 +13,8 @@
                 // Push user_id to data layer
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
-                    'event': 'user_id_ready',
-                    'user_id': userId
+                    'user_id': userId,
+                    'event': 'user_id_ready'
                 });
 
                 // Debugging information
@@ -22,6 +22,11 @@
             } else {
                 document.getElementById('user-id-display').textContent = 'No User ID found.';
             }
+
+            // Trigger login event after pushing user_id to data layer
+            window.dataLayer.push({
+                'event': 'login'
+            });
         }
 
         function sendUserIDToGA() {
