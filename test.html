@@ -19,7 +19,6 @@
     <!-- End Google Tag Manager (noscript) -->
 
     <h1>GA4 User ID Test</h1>
-    <button onclick="generateAndSendUserID()">Generate and Send User ID</button>
     <p id="user-id-display"></p>
 
     <script>
@@ -33,7 +32,7 @@
             return result;
         }
 
-        function generateAndSendUserID() {
+        function setAndSendUserID() {
             const userId = generateRandomUserID(12);
             document.cookie = `user_id=${userId}; path=/`;
             document.getElementById('user-id-display').textContent = `Generated User ID: ${userId}`;
@@ -41,17 +40,16 @@
             // Push user_id to data layer
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
-                'event': 'user_id_generated',
                 'user_id': userId
             });
 
             // Debugging information
             console.log('Cookie set: user_id=' + userId);
-            console.log('GA4 event sent: user_id_generated', {
-                'user_id': userId
-            });
             console.log('Data Layer:', window.dataLayer);
         }
+
+        // Set and send user ID on page load
+        window.onload = setAndSendUserID;
     </script>
 </body>
 </html>
