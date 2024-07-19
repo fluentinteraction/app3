@@ -17,11 +17,11 @@
 
         function setUserID() {
             const userId = generateRandomUserID(12);
-            localStorage.setItem('user_id', userId);
+            document.cookie = `user_id=${userId}; path=/`;
             document.getElementById('user-id-display').textContent = `Generated User ID: ${userId}`;
 
             // Debugging information
-            console.log('Local Storage set: user_id=' + userId);
+            console.log('Cookie set: user_id=' + userId);
         }
 
         // Set user ID immediately
