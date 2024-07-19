@@ -10,7 +10,7 @@
             if (userId) {
                 document.getElementById('user-id-display').textContent = `Stored User ID: ${userId}`;
 
-                // Push user_id to data layer
+                // Push custom_user_id to data layer
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
                     'custom_user_id': userId,
@@ -20,7 +20,7 @@
                 // Debugging information
                 console.log('Data Layer:', window.dataLayer);
 
-                // Initialize GTM after pushing user_id to data layer
+                // Initialize GTM after pushing custom_user_id to data layer
                 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
                 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -35,7 +35,7 @@
         function sendUserIDToGA() {
             const userId = sessionStorage.getItem('user_id');
             if (userId) {
-                // Push custom event to data layer to send user_id to GA
+                // Push custom event to data layer to send custom_user_id to GA
                 window.dataLayer.push({
                     'event': 'send_user_id_to_ga',
                     'custom_user_id': userId
