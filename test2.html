@@ -31,8 +31,10 @@
             }
         }
 
-        // Get user ID immediately
-        getUserID();
+        // Run getUserID function after the DOM has fully loaded
+        document.addEventListener("DOMContentLoaded", function() {
+            getUserID();
+        });
     </script>
 </head>
 <body>
