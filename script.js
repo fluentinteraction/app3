@@ -9,10 +9,6 @@ window.generateCode = function() {
         sessionStorage.setItem('businessSize', size);
         sessionStorage.setItem('custom_user_id', code);
         document.cookie = `custom_user_id=${code}; path=/`; // Set the custom_user_id cookie
-        window.dataLayer.push({
-            'event': 'login',
-            'custom_user_id': code
-        });
         createAirtableEntry(code, size);
     } else {
         alert('Please select a business size.');
@@ -52,6 +48,10 @@ function createAirtableEntry(code, size) {
         }
     }).then(response => {
         console.log('Data saved to Airtable:', response.data);
+        window.dataLayer.push({
+            'event': 'login',
+            'custom_user_id': code
+        });
         // Redirect after successfully creating the entry
         window.location.href = 'tasks.html';
     }).catch(error => {
@@ -62,10 +62,6 @@ function createAirtableEntry(code, size) {
 window.loadCode = function() {
     const code = sessionStorage.getItem('custom_user_id');
     if (code) {
-        window.dataLayer.push({
-            'event': 'login',
-            'custom_user_id': code
-        });
         document.getElementById('generated-code').textContent = code;
         document.cookie = `custom_user_id=${code}; path=/`; // Set the custom_user_id cookie
         fetchRecordId(code);
