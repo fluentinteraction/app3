@@ -19,7 +19,8 @@
                 // Push user_id to data layer
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
-                    'user_id': userId
+                    'user_id': userId,
+                    'event': 'user_id_ready' // Custom event to signal user_id is ready
                 });
 
                 // Debugging information
@@ -30,11 +31,14 @@
             }
         }
 
-        // Get user ID on DOM load
-        document.addEventListener("DOMContentLoaded", getUserID);
+        // Get user ID immediately
+        getUserID();
     </script>
+</head>
+<body>
     <!-- Google Tag Manager -->
     <script>
+        window.dataLayer = window.dataLayer || [];
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -42,8 +46,7 @@
         })(window,document,'script','dataLayer','GTM-K45J2CVG');
     </script>
     <!-- End Google Tag Manager -->
-</head>
-<body>
+
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K45J2CVG"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
