@@ -52,8 +52,8 @@ function createAirtableEntry(code, size) {
         }
     }).then(response => {
         console.log('Data saved to Airtable:', response.data);
-        // Remove the direct redirect here
-        // window.location.href = 'tasks.html'; // Redirect after successfully creating the entry
+        // Redirect after successfully creating the entry
+        window.location.href = 'tasks.html';
     }).catch(error => {
         console.error('Error saving to Airtable:', error);
     });
