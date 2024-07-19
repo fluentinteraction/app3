@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GA4 User ID Test - Page 2</title>
+    <script>
+        function getUserID() {
+            const userId = localStorage.getItem('user_id');
+            if (userId) {
+                // Push user_id to data layer
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    'user_id': userId
+                });
+
+                // Debugging information
+                console.log('Local Storage retrieved: user_id=' + userId);
+                console.log('Data Layer:', window.dataLayer);
+
+                document.getElementById('user-id-display').textContent = `Stored User ID: ${userId}`;
+            } else {
+                document.getElementById('user-id-display').textContent = 'No User ID found.';
+            }
+        }
+
+        // Get user ID on DOM load
+        document.addEventListener("DOMContentLoaded", getUserID);
+    </script>
     <!-- Google Tag Manager -->
     <script>
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -13,30 +36,6 @@
         })(window,document,'script','dataLayer','GTM-K45J2CVG');
     </script>
     <!-- End Google Tag Manager -->
-    <script>
-        function getUserID() {
-            const userId = localStorage.getItem('user_id');
-            if (userId) {
-                document.getElementById('user-id-display').textContent = `Stored User ID: ${userId}`;
-
-                // Push user_id to data layer
-                window.dataLayer = window.dataLayer || [];
-                window.dataLayer.push({
-                    'event': 'user_id_loaded',
-                    'user_id': userId
-                });
-
-                // Debugging information
-                console.log('Local Storage retrieved: user_id=' + userId);
-                console.log('Data Layer:', window.dataLayer);
-            } else {
-                document.getElementById('user-id-display').textContent = 'No User ID found.';
-            }
-        }
-
-        // Get user ID on DOM load
-        document.addEventListener("DOMContentLoaded", getUserID);
-    </script>
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
