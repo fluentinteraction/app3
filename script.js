@@ -20,10 +20,6 @@ window.retrieveToolkit = function() {
     if (code) {
         sessionStorage.setItem('custom_user_id', code);
         document.cookie = `custom_user_id=${code}; path=/`; // Set the custom_user_id cookie
-        window.dataLayer.push({
-            'event': 'login',
-            'custom_user_id': code
-        });
         window.location.href = 'tasks.html';
     } else {
         alert('Please enter a code.');
@@ -48,11 +44,6 @@ function createAirtableEntry(code, size) {
         }
     }).then(response => {
         console.log('Data saved to Airtable:', response.data);
-        window.dataLayer.push({
-            'event': 'login',
-            'custom_user_id': code
-        });
-        // Redirect after successfully creating the entry
         window.location.href = 'tasks.html';
     }).catch(error => {
         console.error('Error saving to Airtable:', error);
@@ -171,14 +162,3 @@ function updateDropdowns() {
         }
     });
 }
-
-// Ensure the login event fires before the container loaded event
-window.addEventListener('DOMContentLoaded', (event) => {
-    const code = sessionStorage.getItem('custom_user_id');
-    if (code) {
-        window.dataLayer.push({
-            'event': 'login',
-            'custom_user_id': code
-        });
-    }
-});
