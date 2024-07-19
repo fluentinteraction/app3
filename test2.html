@@ -17,15 +17,13 @@
                 // Debugging information
                 console.log('Local Storage retrieved: user_id=' + userId);
                 console.log('Data Layer:', window.dataLayer);
-
-                document.getElementById('user-id-display').textContent = `Stored User ID: ${userId}`;
             } else {
-                document.getElementById('user-id-display').textContent = 'No User ID found.';
+                console.log('No User ID found.');
             }
         }
 
-        // Get user ID on DOM load
-        document.addEventListener("DOMContentLoaded", getUserID);
+        // Get user ID immediately
+        getUserID();
     </script>
     <!-- Google Tag Manager -->
     <script>
@@ -45,6 +43,15 @@
 
     <h1>GA4 User ID Test - Page 2</h1>
     <p id="user-id-display">Loading user ID...</p>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const userId = localStorage.getItem('user_id');
+            if (userId) {
+                document.getElementById('user-id-display').textContent = `Stored User ID: ${userId}`;
+            } else {
+                document.getElementById('user-id-display').textContent = 'No User ID found.';
+            }
+        });
+    </script>
 </body>
 </html>
- 
