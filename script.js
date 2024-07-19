@@ -2,7 +2,7 @@ const baseId = 'appz5FTUV9lRIrVnX';
 const tableId = 'tbl6c1vtMHKAdvW0y';
 const apiKey = 'patbmGeSlLVLQyp3r.9ff9b009853c2c0a1232bda0220d640cca61257877c22b25336850c6b62775a5';
 
-function generateCode() {
+window.generateCode = function() {
     const size = document.getElementById('business-size').value;
     if (size && wordsArray.length > 0) {
         const code = `${wordsArray[Math.floor(Math.random() * wordsArray.length)]}${wordsArray[Math.floor(Math.random() * wordsArray.length)]}${wordsArray[Math.floor(Math.random() * wordsArray.length)]}`;
@@ -15,7 +15,7 @@ function generateCode() {
     }
 }
 
-function retrieveToolkit() {
+window.retrieveToolkit = function() {
     const code = document.getElementById('code-input').value;
     if (code) {
         sessionStorage.setItem('custom_user_id', code);
@@ -50,7 +50,7 @@ function createAirtableEntry(code, size) {
     });
 }
 
-function loadCode() {
+window.loadCode = function() {
     const code = sessionStorage.getItem('custom_user_id');
     if (code) {
         document.getElementById('generated-code').textContent = code;
@@ -91,17 +91,17 @@ function loadRecordData(fields) {
     updateDropdowns();
 }
 
-function copyCode() {
+window.copyCode = function() {
     const code = document.getElementById('generated-code').textContent;
     navigator.clipboard.writeText(code);
 }
 
-function resetCode() {
+window.resetCode = function() {
     sessionStorage.clear();
     window.location.href = 'index.html';
 }
 
-function updateStatus(taskId) {
+window.updateStatus = function(taskId) {
     const status = document.getElementById(`${taskId}-update`).value;
     document.getElementById(`${taskId}-status`).textContent = status;
     const code = sessionStorage.getItem('custom_user_id');
@@ -162,5 +162,3 @@ function updateDropdowns() {
         }
     });
 }
-
-window.onload = loadCode;
