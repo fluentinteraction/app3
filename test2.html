@@ -13,7 +13,7 @@
                 // Push user_id to data layer
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
-                    'user_id': userId,
+                    'custom_user_id': userId,
                     'event': 'user_id_ready'
                 });
 
@@ -38,7 +38,7 @@
                 // Push custom event to data layer to send user_id to GA
                 window.dataLayer.push({
                     'event': 'send_user_id_to_ga',
-                    'user_id': userId
+                    'custom_user_id': userId
                 });
 
                 // Debugging information
