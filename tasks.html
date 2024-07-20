@@ -26,6 +26,17 @@
     <!-- End Google Tag Manager -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="script.js"></script>
+    <style>
+        .not-complete {
+            color: orange;
+        }
+        .complete {
+            color: green;
+        }
+        .skipped {
+            color: grey;
+        }
+    </style>
 </head>
 <body onload="loadCode()">
     <!-- Google Tag Manager (noscript) -->
@@ -50,7 +61,7 @@
         <tbody>
             <tr>
                 <td>Task 1</td>
-                <td id="task1-status">Not complete</td>
+                <td id="task1-status" class="not-complete">Not complete</td>
                 <td>
                     <select id="task1-update">
                         <option disabled selected>Select...</option>
@@ -60,7 +71,7 @@
             </tr>
             <tr>
                 <td>Task 2</td>
-                <td id="task2-status">Not complete</td>
+                <td id="task2-status" class="not-complete">Not complete</td>
                 <td>
                     <select id="task2-update">
                         <option disabled selected>Select...</option>
@@ -70,7 +81,7 @@
             </tr>
             <tr>
                 <td>Task 3</td>
-                <td id="task3-status">Not complete</td>
+                <td id="task3-status" class="not-complete">Not complete</td>
                 <td>
                     <select id="task3-update">
                         <option disabled selected>Select...</option>

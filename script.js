@@ -88,6 +88,9 @@ function loadRecordData(fields) {
     document.getElementById('task1-status').textContent = fields['Task 1'] || 'Not complete';
     document.getElementById('task2-status').textContent = fields['Task 2'] || 'Not complete';
     document.getElementById('task3-status').textContent = fields['Task 3'] || 'Not complete';
+    updateStatusColor('task1');
+    updateStatusColor('task2');
+    updateStatusColor('task3');
     updateDropdowns();
 }
 
@@ -104,6 +107,7 @@ window.resetCode = function() {
 window.updateStatus = function(taskId) {
     const status = document.getElementById(`${taskId}-update`).value;
     document.getElementById(`${taskId}-status`).textContent = status;
+    updateStatusColor(taskId);
     const code = sessionStorage.getItem('custom_user_id');
     const size = sessionStorage.getItem('businessSize');
     updateAirtableRecord(code, size);
@@ -161,4 +165,16 @@ function updateDropdowns() {
             dropdown.innerHTML += '<option value="Not complete">Not complete</option><option value="Complete">Complete</option>';
         }
     });
+}
+
+function updateStatusColor(taskId) {
+    const statusElement = document.getElementById(`${taskId}-status`);
+    const status = statusElement.textContent;
+    if (status === 'Not complete') {
+        statusElement.className = 'not-complete';
+    } else if (status === 'Complete') {
+        statusElement.className = 'complete';
+    } else if (status === 'Skipped') {
+        statusElement.className = 'skipped';
+    }
 }
