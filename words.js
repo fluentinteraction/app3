@@ -1,6 +1,6 @@
 const wordsArray = [
-    "abandon", "ability", "able", "about", "above", "absent", "absolute", "abstract", "abuse", "academic", 
-    "accept", "access", "accident", "accompany", "account", "accurate", "accuse", "achieve", "acid", "acquire",
+    "Abandon", "Ability", "Able", "About", "Above", "Absent", "Absolute", "Abstract", "Abuse", "Academic", 
+    "Accept", "Access", "Accident", "Accompany", "Account", "Accurate", "Accuse", "Achieve", "Acid", "Acquire",
     "Adore", "Afraid", "Alarm", "Amazed", "Anger", "Angst", "Anxious", "Appear", "Apple", "Argue",
     "Ashamed", "Attack", "Aware", "Baby", "Badger", "Bag", "Ball", "Bat", "Beach", "Beam",
     "Bear", "Beetle", "Begin", "Believe", "Bird", "Black", "Blast", "Blaze", "Bliss", "Blush",
