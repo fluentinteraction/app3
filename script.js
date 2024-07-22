@@ -105,27 +105,24 @@ window.resetCode = function() {
 }
 
 window.updateStatus = function(taskId) {
-    const status = document.getElementById(`${taskId}-update`).value;
-    document.getElementById(`${taskId}-status`).textContent = status;
-    updateStatusColor(taskId);
-    const code = sessionStorage.getItem('custom_user_id');
-    const size = sessionStorage.getItem('businessSize');
-    updateAirtableRecord(code, size);
-    updateDropdowns();
-
-    // Push the update status event to the data layer
-    window.dataLayer.push({
-        'event': 'update_status',
-        'task_id': taskId,
-        'status': status,
-        'custom_user_id': code
-    });
-
-    console.log('GA4 event sent: update_status', {
-        'task_id': taskId,
-        'status': status,
-        'custom_user_id': code
-    });
+    const dropdown = document.getElementById(`${taskId}-update`);
+    const status = dropdown.value;
+    if (status) {
+        const taskName = taskId.replace('-', ' '); // Assuming taskId is in format task1, task2, etc.
+        document.getElementById(`${taskId}-status`).textContent = status;
+        updateStatusColor(taskId);
+        localStorage.setItem(`${taskId}-status`, status);
+        
+        // Fire GTM event
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            event: 'status_update',
+            task_name: taskName,
+            status: status
+        });
+    } else {
+        alert('Please select a status.');
+    }
 }
 
 function updateAirtableRecord(code, size) {
