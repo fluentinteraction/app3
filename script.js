@@ -1,180 +1,62 @@
-const baseId = 'appz5FTUV9lRIrVnX';
-const tableId = 'tbl6c1vtMHKAdvW0y';
-const apiKey = 'patbmGeSlLVLQyp3r.9ff9b009853c2c0a1232bda0220d640cca61257877c22b25336850c6b62775a5';
-
-window.generateCode = function() {
-    const size = document.getElementById('business-size').value;
-    if (size && wordsArray.length > 0) {
-        const code = `${wordsArray[Math.floor(Math.random() * wordsArray.length)]}${wordsArray[Math.floor(Math.random() * wordsArray.length)]}${wordsArray[Math.floor(Math.random() * wordsArray.length)]}`;
-        sessionStorage.setItem('businessSize', size);
-        sessionStorage.setItem('custom_user_id', code);
-        document.cookie = `custom_user_id=${code}; path=/`; // Set the custom_user_id cookie
-        createAirtableEntry(code, size);
-    } else {
-        alert('Please select a business size.');
-    }
-}
-
-window.retrieveToolkit = function() {
-    const code = document.getElementById('code-input').value;
-    if (code) {
-        sessionStorage.setItem('custom_user_id', code);
-        document.cookie = `custom_user_id=${code}; path=/`; // Set the custom_user_id cookie
-        window.location.href = 'tasks.html';
-    } else {
-        alert('Please enter a code.');
-    }
-}
-
-function createAirtableEntry(code, size) {
-    const data = {
-        fields: {
-            ID: code,
-            Size: size,
-            'Task 1': 'Not complete',
-            'Task 2': 'Not complete',
-            'Task 3': 'Not complete'
-        }
-    };
-
-    axios.post(`https://api.airtable.com/v0/${baseId}/${tableId}`, data, {
-        headers: {
-            Authorization: `Bearer ${apiKey}`,
-            'Content-Type': 'application/json'
-        }
-    }).then(response => {
-        console.log('Data saved to Airtable:', response.data);
-        window.location.href = 'tasks.html';
-    }).catch(error => {
-        console.error('Error saving to Airtable:', error);
-    });
-}
-
-window.loadCode = function() {
-    const code = sessionStorage.getItem('custom_user_id');
-    if (code) {
-        document.getElementById('generated-code').textContent = code;
-        document.cookie = `custom_user_id=${code}; path=/`; // Set the custom_user_id cookie
-        fetchRecordId(code);
-    } else {
+window.onload = function() {
+    var code = localStorage.getItem('custom_user_id');
+    if (!code) {
         window.location.href = 'index.html';
     }
+};
+
+function loadTasks() {
+    var code = localStorage.getItem('custom_user_id');
+    document.getElementById('generated-code').textContent = code;
+    populateUpdateDropdowns();
 }
 
-function fetchRecordId(code) {
-    axios.get(`https://api.airtable.com/v0/${baseId}/${tableId}`, {
-        headers: {
-            Authorization: `Bearer ${apiKey}`
-        },
-        params: {
-            filterByFormula: `{ID}="${code}"`
-        }
-    }).then(response => {
-        const records = response.data.records;
-        if (records.length > 0) {
-            recordId = records[0].id;
-            console.log('Record ID:', recordId);
-            loadRecordData(records[0].fields);
-        } else {
-            console.error('No record found with the given ID.');
-        }
-    }).catch(error => {
-        console.error('Error fetching record ID:', error);
+function saveCodeToLocalStorage(code) {
+    localStorage.setItem('custom_user_id', code);
+    window.dataLayer.push({
+        'event': 'login',
+        'custom_user_id': code
     });
 }
 
-function loadRecordData(fields) {
-    console.log('Record Data:', fields); // Log the record data
-    document.getElementById('task1-status').textContent = fields['Task 1'] || 'Not complete';
-    document.getElementById('task2-status').textContent = fields['Task 2'] || 'Not complete';
-    document.getElementById('task3-status').textContent = fields['Task 3'] || 'Not complete';
-    updateStatusColor('task1');
-    updateStatusColor('task2');
-    updateStatusColor('task3');
-    updateDropdowns();
-}
-
-window.copyCode = function() {
-    const code = document.getElementById('generated-code').textContent;
+function copyCode() {
+    var code = localStorage.getItem('custom_user_id');
     navigator.clipboard.writeText(code);
+    alert("Code copied to clipboard");
 }
 
-window.resetCode = function() {
-    sessionStorage.clear();
+function resetCode() {
+    localStorage.removeItem('custom_user_id');
     window.location.href = 'index.html';
 }
 
-window.updateStatus = function(taskId) {
-    const dropdown = document.getElementById(`${taskId}-update`);
-    const status = dropdown.value;
-    if (status) {
-        const taskName = taskId.replace('-', ' '); // Assuming taskId is in format task1, task2, etc.
-        document.getElementById(`${taskId}-status`).textContent = status;
-        updateStatusColor(taskId);
-        localStorage.setItem(`${taskId}-status`, status);
-        updateAirtableRecord;
-        updateDropdowns();
+function populateUpdateDropdowns() {
+    var statuses = ['Not complete', 'Complete', 'Skipped'];
+    var dropdowns = document.querySelectorAll('select[id$="-update"]');
+    dropdowns.forEach(function(dropdown) {
+        statuses.forEach(function(status) {
+            var option = document.createElement('option');
+            option.value = status;
+            option.text = status;
+            dropdown.appendChild(option);
+        });
+    });
+}
+
+function updateStatus(taskId) {
+    var dropdown = document.getElementById(taskId + '-update');
+    var status = dropdown.value;
+    if (status !== 'Select...') {
+        document.getElementById(taskId + '-status').textContent = status;
+        document.getElementById(taskId + '-status').className = status.toLowerCase().replace(' ', '-');
         
-        // Fire GTM event
-        window.dataLayer = window.dataLayer || [];
+        // Push the status update event to dataLayer
         window.dataLayer.push({
-            event: 'status_update',
-            task_name: taskName,
-            status: status
-            'custom_user_id': code
+            'event': 'status_updated',
+            'task_id': taskId,
+            'status': status
         });
     } else {
-        alert('Please select a status.');
-    }
-}
-
-function updateAirtableRecord {
-    const data = {
-        fields: {
-            ID: code,
-            Size: size,
-            'Task 1': document.getElementById('task1-status').textContent,
-            'Task 2': document.getElementById('task2-status').textContent,
-            'Task 3': document.getElementById('task3-status').textContent
-        }
-    };
-
-    axios.patch(`https://api.airtable.com/v0/${baseId}/${tableId}/${recordId}`, data, {
-        headers: {
-            Authorization: `Bearer ${apiKey}`,
-            'Content-Type': 'application/json'
-        }
-    }).then(response => {
-        console.log('Data updated in Airtable:', response.data);
-    }).catch(error => {
-        console.error('Error updating Airtable:', error);
-    });
-}
-
-function updateDropdowns() {
-    const tasks = ['task1', 'task2', 'task3'];
-    tasks.forEach(task => {
-        const status = document.getElementById(`${task}-status`).textContent;
-        const dropdown = document.getElementById(`${task}-update`);
-        dropdown.innerHTML = '<option disabled selected>Select...</option>';
-        if (status === 'Not complete') {
-            dropdown.innerHTML += '<option value="Complete">Complete</option><option value="Skipped">Skipped</option>';
-        } else if (status === 'Complete') {
-            dropdown.innerHTML += '<option value="Not complete">Not complete</option><option value="Skipped">Skipped</option>';
-        } else if (status === 'Skipped') {
-            dropdown.innerHTML += '<option value="Not complete">Not complete</option><option value="Complete">Complete</option>';
-        }
-    });
-}
-
-function updateStatusColor(taskId) {
-    const statusElement = document.getElementById(`${taskId}-status`);
-    const status = statusElement.textContent;
-    if (status === 'Not complete') {
-        statusElement.className = 'not-complete';
-    } else if (status === 'Complete') {
-        statusElement.className = 'complete';
-    } else if (status === 'Skipped') {
-        statusElement.className = 'skipped';
+        alert("Please select a valid status.");
     }
 }

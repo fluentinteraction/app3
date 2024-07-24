@@ -7,7 +7,7 @@
     <!-- Push login event to data layer -->
     <script>
         (function() {
-            var code = sessionStorage.getItem('custom_user_id');
+            var code = localStorage.getItem('custom_user_id');
             if (code) {
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
@@ -38,7 +38,7 @@
         }
     </style>
 </head>
-<body onload="loadCode()">
+<body onload="loadTasks()">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K45J2CVG"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -93,4 +93,3 @@
     </table>
 </body>
 </html>
- 
