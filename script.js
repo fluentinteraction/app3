@@ -105,15 +105,13 @@ window.resetCode = function() {
 }
 
 window.updateStatus = function(taskId) {
-    const dropdown = document.getElementById(`${taskId}-update`);
-    const status = dropdown.value;
-    if (status) {
-        const taskName = taskId.replace('-', ' '); // Assuming taskId is in format task1, task2, etc.
-        document.getElementById(`${taskId}-status`).textContent = status;
-        updateStatusColor(taskId);
-        localStorage.setItem(`${taskId}-status`, status);
-        updateAirtableRecord(code, size);
-        updateDropdowns();
+    const status = document.getElementById(`${taskId}-update`).value;
+    document.getElementById(`${taskId}-status`).textContent = status;
+    updateStatusColor(taskId);
+    const code = sessionStorage.getItem('custom_user_id');
+    const size = sessionStorage.getItem('businessSize');
+    updateAirtableRecord(code, size);
+    updateDropdowns();
         
         // Fire GTM event
         window.dataLayer = window.dataLayer || [];
