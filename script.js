@@ -122,8 +122,8 @@ window.updateStatus = function(taskId) {
             status: status
     });
 
-    console.log('GA4 event sent: update_status', {
-        'task_id': taskId,
+    console.log('GA4 event sent: status_update', {
+        'task_name': taskName,
         'status': status,
         'custom_user_id': code
     });
