@@ -112,7 +112,7 @@ window.updateStatus = function(taskId) {
         document.getElementById(`${taskId}-status`).textContent = status;
         updateStatusColor(taskId);
         localStorage.setItem(`${taskId}-status`, status);
-        updateAirtableRecord(code, size);
+        updateAirtableRecord;
         updateDropdowns();
         
         // Fire GTM event
@@ -121,13 +121,14 @@ window.updateStatus = function(taskId) {
             event: 'status_update',
             task_name: taskName,
             status: status
+            'custom_user_id': code
         });
     } else {
         alert('Please select a status.');
     }
 }
 
-function updateAirtableRecord(code, size) {
+function updateAirtableRecord {
     const data = {
         fields: {
             ID: code,
