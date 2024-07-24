@@ -113,12 +113,12 @@ window.updateStatus = function(taskId) {
     updateAirtableRecord(code, size);
     updateDropdowns();
 
-    // Push the update status event to the data layer
-    window.dataLayer.push({
-        'event': 'update_status',
-        'task_id': taskId,
-        'status': status,
-        'custom_user_id': code
+    // Fire GTM event
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            event: 'status_update',
+            task_name: taskName,
+            status: status
     });
 
     console.log('GA4 event sent: update_status', {
