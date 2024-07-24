@@ -110,6 +110,7 @@ window.updateStatus = function(taskId) {
     updateStatusColor(taskId);
     const code = sessionStorage.getItem('custom_user_id');
     const size = sessionStorage.getItem('businessSize');
+    const taskName = taskId.replace('-', ' ');
     updateAirtableRecord(code, size);
     updateDropdowns();
 
