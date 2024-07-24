@@ -112,6 +112,7 @@ window.updateStatus = function(taskId) {
         document.getElementById(`${taskId}-status`).textContent = status;
         updateStatusColor(taskId);
         localStorage.setItem(`${taskId}-status`, status);
+        updateAirtableRecord(code, size);
         
         // Fire GTM event
         window.dataLayer = window.dataLayer || [];
