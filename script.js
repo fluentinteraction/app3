@@ -113,6 +113,7 @@ window.updateStatus = function(taskId) {
         updateStatusColor(taskId);
         localStorage.setItem(`${taskId}-status`, status);
         updateAirtableRecord(code, size);
+        updateDropdowns();
         
         // Fire GTM event
         window.dataLayer = window.dataLayer || [];
