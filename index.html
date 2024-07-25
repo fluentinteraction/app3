@@ -29,6 +29,11 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="words.js"></script>
     <script src="script.js"></script>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+</style>
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -58,6 +63,7 @@
             <input type="text" id="code-input" placeholder="Enter code">
             <button type="button" onclick="retrieveToolkit()">Submit</button>
         </form>
-    </div>
+        <p id="error-message" style="color:red; display:none;">Code not found</p>
+    </div> 
 </body>
 </html>

@@ -17,10 +17,33 @@ window.generateCode = function() {
 
 window.retrieveToolkit = function() {
     const code = document.getElementById('code-input').value;
+    const errorMessage = document.getElementById('error-message');
+
+    // Hide error message initially
+    errorMessage.style.display = 'none';
+
     if (code) {
-        sessionStorage.setItem('custom_user_id', code);
-        document.cookie = `custom_user_id=${code}; path=/`; // Set the custom_user_id cookie
-        window.location.href = 'tasks.html';
+        // Check if the code exists in Airtable
+        axios.get(`https://api.airtable.com/v0/${baseId}/${tableId}?filterByFormula={ID}='${code}'`, {
+            headers: {
+                Authorization: `Bearer ${apiKey}`
+            }
+        }).then(response => {
+            if (response.data.records.length > 0) {
+                // Code found, proceed
+                sessionStorage.setItem('custom_user_id', code);
+                document.cookie = `custom_user_id=${code}; path=/`; // Set the custom_user_id cookie
+                window.location.href = 'tasks.html';
+            } else {
+                // Code not found, show error message
+                errorMessage.textContent = 'Code not found';
+                errorMessage.style.display = 'block';
+            }
+        }).catch(error => {
+            console.error('Error retrieving from Airtable:', error);
+            errorMessage.textContent = 'An error occurred. Please try again later.';
+            errorMessage.style.display = 'block';
+        });
     } else {
         alert('Please enter a code.');
     }

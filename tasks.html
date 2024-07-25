@@ -37,6 +37,27 @@
             color: grey;
         }
     </style>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    table {
+        margin-top: 20px;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
 </head>
 <body onload="loadCode()">
     <!-- Google Tag Manager (noscript) -->
@@ -45,8 +66,8 @@
     <!-- End Google Tag Manager (noscript) -->
     <h1>App3 tasks</h1>
     <div id="toolkit-display">
-        <p>Code: <span id="generated-code"></span></p>
-        <button onclick="copyCode()">Copy code</button>
+        <p>Code: <span id="generated-code"></span>&nbsp;&nbsp;<button onclick="copyCode()">Copy code</button></p>
+        
         <button onclick="resetCode()">Clear Data and Restart</button>
     </div>
 
